@@ -1,34 +1,14 @@
 <template>
-    <ul>
+    <ul class="w-full bg-primary flex justify-between p-3">
         <li id="home">
             Home
         </li>
+        <li>
+            <img class="absolute left-[50%] translate-x-[-50%] mt-[-2%]" src="./icons/logo.svg" alt="">
+        </li>
         <li id="order">
-            Order
+            <img src="./icons/Basket.svg" alt="">
         </li>
     </ul>
 </template>
 
-<style scoped>
-    ul {
-        display: flex;
-        justify-content: space-around;
-        list-style: none;
-        background-color: #64F243;
-        padding: 0;
-    }
-
-    li {
-        padding: 10px;
-        cursor: pointer;
-    }
-
-    li:hover {
-        background-color: #198900;
-        color: white;
-    }
-
-    li.active {
-        background-color: #ccc;
-    }
-</style>
