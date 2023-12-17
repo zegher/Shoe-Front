@@ -1,26 +1,22 @@
 <template>
     <div class="bg-black h-screen">
         <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
-            SHOES
+            SHOE ORDERS
         </h1>
 
         
-        <div class="flex justify-center m-[5%] gap-6">
-            <div>
+       <div class="flex justify-center m-[5%] gap-6">
+        <!-- Loop so all shoeorders are shown -->
+
+            <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
                 <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
-                <p class="text-white">{{ shoes.data[0].shoeOrders[0].brand }}</p>
-                <p class="text-white">{{ shoes.data[0].shoeOrders[0].price }}</p>
-                <p class="text-black border-2 border-primary bg-primary mt-[30px]">Price</p>
+                <p class="text-white">{{ order.brand }}</p>
+                <p class="text-white">{{ order.price }}</p>
+                <p class="text-black border-2 border-primary bg-primary mt-[30px]">Details</p>
             </div>
            
-            <div>
-                <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
-                <p class="text-white">{{ shoes.data[0].shoeOrders[1].brand }}</p>
-                <p class="text-white">{{ shoes.data[0].shoeOrders[1].price }}</p>
-                <p class="text-black border-2 border-primary bg-primary mt-[30px]">Price</p>
-            </div>                
-        </div>        
-    </div>
+        </div>       
+    </div> 
 
 
 </template>
