@@ -78,7 +78,8 @@ export default {
   </header>
   
 
-  <div class="bg-black h-screen">
+  
+  <div class="bg-black h-[1200px]">
       <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
           SHOE ORDERS
       </h1>
@@ -93,7 +94,7 @@ export default {
       </div>
   </div> 
 
-    <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-150px] p-[5%] h-[400px] w-[500px]">
+    <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-600px] p-[5%] h-[400px] w-[500px]">
         <!-- an X that closes this div -->
         <p class="text-black text-1xl font-bold ml-[-55px] mt-[-60px]" @click="selectedShoe = null">X</p>
 
@@ -113,6 +114,6 @@ export default {
         <p><strong>Inside color:</strong> {{ selectedShoe.insideColor }}</p>
         <p><strong>Outside 1 color:</strong> {{ selectedShoe.outside_1Color }}</p>
         <p><strong>Outside 2 color:</strong> {{ selectedShoe.outside_2Color }}</p>
-        <p><strong>Size color:</strong> {{ selectedShoe.size }}</p>
+        <p><strong>Size:</strong> {{ selectedShoe.size }}</p>
     </div>
 </template>
