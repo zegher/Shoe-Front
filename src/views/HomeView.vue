@@ -2,7 +2,8 @@
 export default {
     data() {
         return {
-            shoes: null
+            shoes: null,
+            selectedShoe: null
         }
     },
     created() {
@@ -12,11 +13,16 @@ export default {
                 this.shoes = data;
                 console.log(data);
             });
-    }
+    },
+    methods: {
+        selectShoe(shoe){
+            this.selectedShoe = shoe;
+        },
+    },
 }
 </script>
 
-<template>
+<template class="overflow-x-hidden">
   <header>
       <ul class="w-full bg-primary flex justify-between p-3">
       <li id="home">
@@ -46,8 +52,23 @@ export default {
               <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
               <p class="text-white">{{ order.brand }}</p>
               <p class="text-white">{{ order.price }}</p>
-              <p class="text-black border-2 border-primary bg-primary mt-[30px]">Details</p>
-          </div>
+              <p class="text-black border-2 border-primary bg-primary mt-[30px]" @click="selectShoe(order)">Details</p>          </div>
       </div>
   </div> 
+
+  <div v-if="selectedShoe" class="bg-primary">
+    <p>Shoe ID: {{ selectedShoe.id }}</p>
+    <p>Made on: {{ selectedShoe.createdAt }}</p>
+    <p>Price: {{ selectedShoe.price }}</p>
+    <p>Sole 1 color: {{ selectedShoe.sole_1Color }}</p>
+    <p>Sole 2 color: {{ selectedShoe.sole_2Color }}</p>
+    <p>Inside color: {{ selectedShoe.insideColor }}</p>
+    <p>Outside 1 color: {{ selectedShoe.outside_1Color }}</p>
+    <p>Outside 2 color: {{ selectedShoe.outside_2Color }}</p>
+    <p>Size color: {{ selectedShoe.size }}</p>
+
+  <!-- Display other properties of the selected shoe... -->
+</div>
+
+
 </template>

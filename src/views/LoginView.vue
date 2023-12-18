@@ -32,6 +32,10 @@ export default {
                     if (data.status === 'error') {
                         throw new Error(data.message || 'Login failed');
                     }
+                    //if not admin then throw error
+                    // if (data.user.admin !== true) {
+                    //     throw new Error('You are not an admin');
+                    // }
 
                     // Handle successful login here, e.g. by storing the returned token and redirecting the user
                     localStorage.setItem('token', data.token);
