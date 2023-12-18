@@ -37,6 +37,8 @@ export default {
                     localStorage.setItem('token', data.token);
                     this.$router.push('/home');
                     console.log(data);
+                    //go to home page
+                    
                 })
                 .catch(error => {
                     console.error('There has been a problem with your fetch operation:', error);
