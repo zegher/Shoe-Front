@@ -26,24 +26,34 @@ export default {
             }
         },
         async updateShoeStatusInApi() {
-            if (this.selectedShoe) {
-                const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
-                method: 'PUT', // or 'PATCH' depending on your API
+        if (this.selectedShoe) {
+            const updatedStatus = { status: this.selectedShoe.status };
+
+            const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(this.selectedShoe),
-                });
+                body: JSON.stringify(updatedStatus),
+            });
 
-                if (!response.ok) {
+            if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const updatedShoe = await response.json();
-                this.selectedShoe = updatedShoe;
             }
-        },
+
+            const updatedShoe = await response.json();
+            this.selectedShoe.status = updatedShoe.status;
+
+            // Optionally, update other properties if needed
+
+            // Find the updated shoe in the shoes array and replace it with the updated shoe
+            const index = this.shoes.findIndex(shoe => shoe._id === updatedShoe._id);
+            if (index !== -1) {
+                this.shoes.splice(index, 1, updatedShoe);
+            }
+        }
     },
+    }
 }
 </script>
 
@@ -84,14 +94,16 @@ export default {
   </div> 
 
     <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-150px] p-[5%] h-[400px] w-[500px]">
+        <!-- an X that closes this div -->
+        <p class="text-black text-1xl font-bold ml-[-55px] mt-[-60px]" @click="selectedShoe = null">X</p>
+
         <p><strong>Shoe ID:</strong> {{ selectedShoe._id }}</p>
         <p><strong>Status:</strong> {{ selectedShoe.status }}</p>
         <p><strong>Change status:</strong></p>
             <select class="bg-primary border-2 border-black text-black" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
-                <option value="status1">Verzonden</option>
-                <option value="status2">Geannuleerd</option>
-                <option value="status2">In Productie</option>
-                <!-- Add more options as needed -->
+                <option value="verzonden">Verzonden</option>
+                <option value="geannuleerd">Geannuleerd</option>
+                <option value="productie">In Productie</option>
             </select>
         <p><strong>Made on:</strong> {{ selectedShoe.createdAt }}</p>
         <p><strong>Price:</strong> {{ selectedShoe.price }}</p>
