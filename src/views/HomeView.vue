@@ -99,12 +99,13 @@ export default {
 
         <p><strong>Shoe ID:</strong> {{ selectedShoe._id }}</p>
         <p><strong>Status:</strong> {{ selectedShoe.status }}</p>
-        <p><strong>Change status:</strong></p>
-            <select class="bg-primary border-2 border-black text-black" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
+        <p><strong>Change status:</strong>
+            <select class="bg-primary border-2 border-black text-black ml-2" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
                 <option value="verzonden">Verzonden</option>
                 <option value="geannuleerd">Geannuleerd</option>
                 <option value="productie">In Productie</option>
             </select>
+        </p>
         <p><strong>Made on:</strong> {{ selectedShoe.createdAt }}</p>
         <p><strong>Price:</strong> {{ selectedShoe.price }}</p>
         <p><strong>Sole 1 color:</strong> {{ selectedShoe.sole_1Color }}</p>
