@@ -6,18 +6,18 @@
             bg-center
             justify-center flex c-primary h-[1000px] w-[100%]">
         <!-- login form -->
-        <form @submit.prevent="login" class="flex flex-col p-9 mt-[10%] bg-black">
+        <form v-on:submit.prevent="login" class="flex flex-col p-9 mt-[10%] bg-black">
             <img src="./icons/logo.svg" class="mb-[-50px] w-[60%]" alt="">
 
             <p class="text-primary mb-5 font-bold text-3xl">LOGIN</p>
 
             <p class="text-white">Username</p>
 
-            <input class=" bg-black border-2 border-white text-white" v-model="username" type="text" placeholder="test">
+            <input v-model="username" class=" bg-black border-2 border-white text-white"  type="text" placeholder="Username">
             
             <p class="text-white mt-3">Password</p>
 
-            <input class=" bg-black border-2 border-white text-white" v-model="password" type="password">
+            <input v-model="password" class=" bg-black border-2 border-white text-white" type="password">
 
             <button type="submit" class="mt-10 bg-primary font-semibold text-black p-2">Login</button>
         </form>
@@ -29,6 +29,7 @@
     export default {
     data() {
         return {
+            //return the v-models for username and password
             username: '',
             password: ''
         }
@@ -39,6 +40,11 @@
         document.getElementById("login").style.display = "none";
     },
     login() {
+    const payload = {
+        username: this.username,
+        password: this.password,
+    };
+    console.log(payload);
     fetch('https://shoe-api-cyzq.onrender.com/api/v1/users/login', {
         method: 'POST',
         headers: {
@@ -49,7 +55,6 @@
             password: this.password
         })
     })
-
     .then(response => response.json())
     .then(data => {
         if (data.status === 'error') {
@@ -60,8 +65,6 @@
         localStorage.setItem('token', data.token);
         this.$router.push('/home');
         console.log(data);
-        // Hide the div after successful login
-        this.hideDiv();
     })
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
