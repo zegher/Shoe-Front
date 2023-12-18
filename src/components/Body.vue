@@ -1,24 +1,37 @@
 <template>
+    <header>
+        <ul class="w-full bg-primary flex justify-between p-3">
+        <li id="home">
+            Home
+        </li>
+        <li class="ml-[-38%]">
+            Profile
+        </li>
+        <li>
+            <img class="absolute left-[50%] translate-x-[-50%] mt-[-2%]" src="./icons/logo.svg" alt="">
+        </li>
+        <li id="order">
+            <img src="./icons/Basket.svg" alt="">
+        </li>
+    </ul>
+    </header>
+    
+
     <div class="bg-black h-screen">
         <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
             SHOE ORDERS
         </h1>
 
-        
-       <div class="flex justify-center m-[5%] gap-6">
-        <!-- Loop so all shoeorders are shown -->
-
+        <div class="flex justify-center m-[5%] gap-6" v-if="shoes">
+            <!-- Loop so all shoeorders are shown -->
             <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
                 <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
                 <p class="text-white">{{ order.brand }}</p>
                 <p class="text-white">{{ order.price }}</p>
                 <p class="text-black border-2 border-primary bg-primary mt-[30px]">Details</p>
             </div>
-           
-        </div>       
+        </div>
     </div> 
-
-
 </template>
 
 <script>
