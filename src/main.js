@@ -1,21 +1,11 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import Login from './components/Login.vue'
-import Body from './components/Body.vue'
+import App from './App.vue'
+import router from './router'
 
-const routes = [
-    { path: '/', component: Login },
-    { path: '/home', component: Body },
-    { path: '/login', component: Login },
-]
+const app = createApp(App)
 
-const router = VueRouter.createRouter({
-    history: VueRouter.createWebHistory(),
-    routes,
-  })
-  
-const app = Vue.createApp({})
+app.use(router)
 
-app.use(router);
-app.mount('#app');
+app.mount('#app')
