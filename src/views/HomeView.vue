@@ -11,50 +11,36 @@ export default {
         fetch('https://shoe-api-cyzq.onrender.com/api/v1/shoes', { mode: 'cors', headers: { 'Access-Control-Allow-Origin': '*' }  })
             .then(response => response.json())
             .then(data => { 
-                this.shoes = data;
-                console.log(data);
+            this.shoes = data;
+            this.shoeCount = data.reduce((total, shoe) => total + shoe.orders, 0);
             });
-    },
+        },
     methods: {
         selectShoe(shoe){
             this.selectedShoe = shoe;
+            console.log(this.selectedShoe._id);
         },
         updateShoeStatus() {
             if (this.selectedShoe) {
-                this.selectedShoe.status = 'newStatus'; // replace 'newStatus' with the desired status
+                // Update the status of the selected shoe
             }
         },
-        // async fetchShoes() {
-        //     try {
-        //         const response = await fetch('https://shoe-api-cyzq.onrender.com/api/v1/shoes');
-        //         if (!response.ok) {
-        //         throw new Error(`HTTP error! status: ${response.status}`);
-        //         }
-        //         const shoes = await response.json();
-        //         this.shoeCount = shoes.length;
-        //     } catch (error) {
-        //         console.error('Error fetching shoes:', error);
-        //     }
-        // },
-        // created() {
-        //     this.fetchShoes();
-        // },
         async updateShoeStatusInApi() {
             if (this.selectedShoe) {
-            const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
+                const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
                 method: 'PUT', // or 'PATCH' depending on your API
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(this.selectedShoe),
-            });
+                });
 
-            if (!response.ok) {
+                if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
-            }
+                }
 
-            const updatedShoe = await response.json();
-            this.selectedShoe = updatedShoe;
+                const updatedShoe = await response.json();
+                this.selectedShoe = updatedShoe;
             }
         },
     },
@@ -76,7 +62,7 @@ export default {
       <li id="order">
           <img src="../assets/Basket.svg" alt="">
           <!-- amount of orders -->
-          <!-- <p class="text-xs">{{ shoeCount }}</p> -->
+          <p class="text-xs" v-if="shoes">{{ shoeCount }}</p>
       </li>
   </ul>
   </header>
@@ -97,15 +83,16 @@ export default {
       </div>
   </div> 
 
-    <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-150px] p-[5%] h-[350px] w-[500px]">
+    <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-150px] p-[5%] h-[400px] w-[500px]">
         <p><strong>Shoe ID:</strong> {{ selectedShoe._id }}</p>
         <p><strong>Status:</strong> {{ selectedShoe.status }}</p>
-        <select v-model="selectedShoe.status" @change="updateShoeStatusInApi">
-            <option value="status1">Verzonden</option>
-            <option value="status2">Geannuleerd</option>
-            <option value="status2">In Productie</option>
-            <!-- Add more options as needed -->
-        </select>
+        <p><strong>Change status:</strong></p>
+            <select class="bg-primary border-2 border-black text-black" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
+                <option value="status1">Verzonden</option>
+                <option value="status2">Geannuleerd</option>
+                <option value="status2">In Productie</option>
+                <!-- Add more options as needed -->
+            </select>
         <p><strong>Made on:</strong> {{ selectedShoe.createdAt }}</p>
         <p><strong>Price:</strong> {{ selectedShoe.price }}</p>
         <p><strong>Sole 1 color:</strong> {{ selectedShoe.sole_1Color }}</p>
