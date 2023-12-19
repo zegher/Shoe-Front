@@ -129,7 +129,7 @@
       </div>
   </div> 
 
-    <div v-if="selectedShoe" class="text-black rounded-lg absolute left-[50%] translate-x-[-50%] bg-primary opacity-1 mt-[-600px] p-[5%] h-[400px] w-[500px]">
+    <div v-if="selectedShoe" class="text-black rounded-lg absolute left-[50%] translate-x-[-50%] bg-primary opacity-1 mt-[-1300px] p-[5%] h-[400px] w-[500px]">
         <!-- an X that closes this div -->
         <p class="text-black text-xl font-bold ml-[-10%] mt-[-10%] cursor-pointer" @click="selectedShoe = null">X</p>
 
@@ -143,7 +143,7 @@
             </select>
         </p>
         <p><strong>Made on:</strong> {{ selectedShoe.createdAt }}</p>
-        <p><strong>Price:</strong> {{ selectedShoe.price }}</p>
+        <p><strong>Price:</strong> {{ selectedShoe.price }} EUR</p>
         <p><strong>Sole 1 color:</strong> {{ selectedShoe.sole_1Color }}</p>
         <p><strong>Sole 2 color:</strong> {{ selectedShoe.sole_2Color }}</p>
         <p><strong>Inside color:</strong> {{ selectedShoe.insideColor }}</p>
