@@ -17,7 +17,7 @@ export default {
                 password: this.password,
             };
             console.log(payload);
-            fetch('https://shoe-api-cyzq.onrender.com/api/v1/users/login', {
+            fetch('https://shoe-api-cyzq.onrender.com/api/v1/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

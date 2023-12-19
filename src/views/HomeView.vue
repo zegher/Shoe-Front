@@ -1,60 +1,125 @@
 <script>
-export default {
-    data() {
-        return {
-            shoes: null,
-            selectedShoe: null,
-            shoeCount: 0,
-        }
-    },
-    created() {
-        fetch('https://shoe-api-cyzq.onrender.com/api/v1/shoes', { mode: 'cors', headers: { 'Access-Control-Allow-Origin': '*' }  })
-            .then(response => response.json())
-            .then(data => { 
-            this.shoes = data;
-            this.shoeCount = data.reduce((total, shoe) => total + shoe.orders, 0);
+
+    export default {
+        data() {
+            return {
+                shoes: null,
+                selectedShoe: null,
+                shoeCount: 0,
+
+                socket: null,
+            }
+        },
+        created() {      
+            fetch('https://shoe-api-cyzq.onrender.com/api/v1/shoes', { mode: 'cors', headers: { 'Access-Control-Allow-Origin': '*' }  })
+                .then(response => response.json())
+                .then(data => { 
+                this.shoes = data;
+                this.shoeCount = data.reduce((total, shoe) => total + shoe.orders, 0);
             });
-        },
-    methods: {
-        selectShoe(shoe){
-            this.selectedShoe = shoe;
-            console.log(this.selectedShoe._id);
-        },
-        updateShoeStatus() {
+
+            },
+        methods: {
+            selectShoe(shoe){
+                this.selectedShoe = shoe;
+                console.log(this.selectedShoe._id);
+            },
+            updateShoeStatus() {
+                if (this.selectedShoe) {
+                    // Update the status of the selected shoe
+                }
+            },
+            async updateShoeStatusInApi() {
             if (this.selectedShoe) {
-                // Update the status of the selected shoe
+                const updatedStatus = { status: this.selectedShoe.status };
+
+                const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedStatus),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const updatedShoe = await response.json();
+                this.selectedShoe.status = updatedShoe.status;
+
+                // Optionally, update other properties if needed
+
+                // Find the updated shoe in the shoes array and replace it with the updated shoe
+                const index = this.shoes.findIndex(shoe => shoe._id === updatedShoe._id);
+                if (index !== -1) {
+                    this.shoes.splice(index, 1, updatedShoe);
+                }
             }
-        },
-        async updateShoeStatusInApi() {
-        if (this.selectedShoe) {
-            const updatedStatus = { status: this.selectedShoe.status };
+            },
+            
 
-            const response = await fetch(`https://shoe-api-cyzq.onrender.com/api/v1/shoes/${this.selectedShoe._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedStatus),
-            });
+            //initialize websocket connection
+            initialWebSocket(){
+                this.socket = new WebSocket('wss://shoe-api-cyzq.onrender.com/primus');
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+                this.socket.addEventListener('open', () => {
+                    console.log('Connected to websocket');
+                });
+                
+                this.socket.addEventListener('message', (event) => {
+                    try{
+                        const data = JSON.parse(event.data);
+                        this.handleWebSocketMessage(data);
+                    } catch (error) {
+                        console.error("Error parsing WebSocket Message:" , error);
+                    }
+                });
+                
+                this.socket.addEventListener('close', (event) => {
+                    console.log("WebSocket closed: "), event;
+                });
 
-            const updatedShoe = await response.json();
-            this.selectedShoe.status = updatedShoe.status;
+                this.socket.addEventListener('error', (event) => {
+                    console.error("WebSocket error: "), event;
+                });
+            },
 
-            // Optionally, update other properties if needed
+            //handle websocket message
+            handleWebSocketMessage(data){
+                if(data && data.status === 'success'&& data.data && data.data.shoeOrder){
+                    //handle new shoe order
+                    const newShoeOrder = data.data.shoeOrder;
+                    console.log("new shoe order created: ", newShoeOrder)
+                    this.shoes.unshift(newShoeOrder);
+                    this.shoeCount++;
+                } else if (data && data.status === 'success' && data.data && data.data.shoeOrder){
+                    //handle updated shoe order
+                    const updatedShoeOrder = data.data.shoeOrder;
+                    console.log("shoe order updated: ", updatedShoeOrder)
+                    const index = this.shoes.findIndex(shoe => shoe._id === updatedShoeOrder._id);
+                    if (index !== -1) {
+                        this.shoes[index] = updatedShoeOrder;
+                    }
+                    else {
+                        console.error("Could not find shoe order to update: ", data);
+                    }
+                }
+            },
 
-            // Find the updated shoe in the shoes array and replace it with the updated shoe
-            const index = this.shoes.findIndex(shoe => shoe._id === updatedShoe._id);
-            if (index !== -1) {
-                this.shoes.splice(index, 1, updatedShoe);
-            }
+            //fetch shoees and initialize websocket connection on component creation
+            created(){
+                this.initialWebSocket();
+                this.created();
+            },
+
+            beforeDestroy(){
+                if(this.socket){
+                    this.socket.close();
+                }
+            },
         }
-    },
     }
-}
 </script>
 
 <template class="overflow-x-hidden">
@@ -84,7 +149,7 @@ export default {
           SHOE ORDERS
       </h1>
 
-      <div class="flex justify-center m-[5%] gap-6" v-if="shoes">
+      <div class="flex flex-wrap justify-center m-[5%] gap-6" v-if="shoes">
           <!-- Loop so all shoeorders are shown -->
           <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
               <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
