@@ -15,11 +15,26 @@
                 .then(response => response.json())
                 .then(data => { 
                 this.shoes = data;
+                console.log("data: ", data);
                 this.shoeCount = data.reduce((total, shoe) => total + shoe.orders, 0);
             });
+        },
+        mounted() {
+            this.initialWebSocket();
+            this.socket.onmessage = (event) => {
+                console.log(event.data);
+                const data = JSON.parse(event.data);
 
-            },
+                console.log(this.shoes.data[0].shoeOrders);
+
+                this.shoes.data[0].shoeOrders.push(data.data.shoe);
+                console.log("logger: ", data);
+            }
+        },
         methods: {
+            sendMessage(){
+                this.socket.send(JSON.stringify('Hello from the client!'));
+            },
             selectShoe(shoe){
                 this.selectedShoe = shoe;
                 console.log(this.selectedShoe._id);
@@ -67,15 +82,6 @@
                     console.log('Connected to websocket');
                 });
                 
-                this.socket.addEventListener('message', (event) => {
-                    try{
-                        const data = JSON.parse(event.data);
-                        this.handleWebSocketMessage(data);
-                    } catch (error) {
-                        console.error("Error parsing WebSocket Message:" , error);
-                    }
-                });
-                
                 this.socket.addEventListener('close', (event) => {
                     console.log("WebSocket closed: "), event;
                 });
@@ -85,39 +91,39 @@
                 });
             },
 
-            //handle websocket message
-            handleWebSocketMessage(data){
-                if(data && data.status === 'success'&& data.data && data.data.shoeOrder){
-                    //handle new shoe order
-                    const newShoeOrder = data.data.shoeOrder;
-                    console.log("new shoe order created: ", newShoeOrder)
-                    this.shoes.unshift(newShoeOrder);
-                    this.shoeCount++;
-                } else if (data && data.status === 'success' && data.data && data.data.shoeOrder){
-                    //handle updated shoe order
-                    const updatedShoeOrder = data.data.shoeOrder;
-                    console.log("shoe order updated: ", updatedShoeOrder)
-                    const index = this.shoes.findIndex(shoe => shoe._id === updatedShoeOrder._id);
-                    if (index !== -1) {
-                        this.shoes[index] = updatedShoeOrder;
-                    }
-                    else {
-                        console.error("Could not find shoe order to update: ", data);
-                    }
-                }
-            },
+            // //handle websocket message
+            // handleWebSocketMessage(data){
+            //     if(data && data.status === 'success' && data.message === "Shoe order created succesfull" && data.data && data.data.shoeOrder){
+            //         //handle new shoe order
+            //         const newShoeOrder = data.data.shoeOrder;
+            //         console.log("new shoe order created: ", newShoeOrder)
+            //         this.shoes.unshift(newShoeOrder);
+            //         this.shoeCount++;
+            //     } else if (data && data.status === 'success' && data.message === "Shoe order data updated succesfull" && data.data && data.data.shoeOrder){
+            //         //handle updated shoe order
+            //         const updatedShoeOrder = data.data.shoeOrder;
+            //         console.log("shoe order updated: ", updatedShoeOrder)
+            //         const index = this.shoes.findIndex(shoe => shoe._id === updatedShoeOrder._id);
+            //         if (index !== -1) {
+            //             this.shoes[index] = updatedShoeOrder;
+            //         }
+            //         else {
+            //             console.error("Could not find shoe order to update: ", data);
+            //         }
+            //     }
+            // },
 
-            //fetch shoees and initialize websocket connection on component creation
-            created(){
-                this.initialWebSocket();
-                this.created();
-            },
+            // //fetch shoees and initialize websocket connection on component creation
+            // created(){
+            //     this.initialWebSocket();
+            //     this.created();
+            // },
 
-            beforeDestroy(){
-                if(this.socket){
-                    this.socket.close();
-                }
-            },
+            // beforeDestroy(){
+            //     if(this.socket){
+            //         this.socket.close();
+            //     }
+            // },
         }
     }
 </script>
@@ -144,18 +150,19 @@
   
 
   
-  <div class="bg-black h-[1200px]">
+  <div class="bg-black h-[1500px]">
       <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
           SHOE ORDERS
       </h1>
 
       <div class="flex flex-wrap justify-center m-[5%] gap-6" v-if="shoes">
-          <!-- Loop so all shoeorders are shown -->
-          <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
-              <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
-              <p class="text-white">{{ order.brand }}</p>
-              <p class="text-white">{{ order.price }}</p>
-              <p class="text-black border-2 border-primary bg-primary mt-[30px]" @click="selectShoe(order)">Details</p>          </div>
+            <!-- Loop so all shoeorders are shown -->
+            <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
+                <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
+                <p class="text-white">{{ order.brand }}</p>
+                <p class="text-white">{{ order.price }} EUR</p>
+                <p class="text-black border-2 border-primary bg-primary mt-[30px]" @click="selectShoe(order)">Details</p>          
+            </div>
       </div>
   </div> 
 
@@ -181,4 +188,5 @@
         <p><strong>Outside 2 color:</strong> {{ selectedShoe.outside_2Color }}</p>
         <p><strong>Size:</strong> {{ selectedShoe.size }}</p>
     </div>
+    <!-- <button @click="sendMessage" class="bg-primary text-black">knop</button> -->
 </template>
