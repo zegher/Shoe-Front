@@ -41,11 +41,10 @@ export default {
                     localStorage.setItem('token', data.token);
                     this.$router.push('/home');
                     console.log(data);
-                    //go to home page
-                    
                 })
                 .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
+                    console.error(error);
+                    this.error = 'You cannot log in. Either your password or e-mail is wrong.';
                 });
         }
     }
@@ -53,6 +52,10 @@ export default {
 </script>
 
 <template>
+    <!-- display error message if login fails -->
+    <div v-if="error">
+        <p class="text-white bg-[red] p-5">{{ error }}</p>
+    </div>
     <div id="login" class="
             bg-[url('https://static.wixstatic.com/media/24eabc_06f112f5cdc742198a78e49953eafd0df000.jpg/v1/fill/w_1519,h_803,al_c,q_85,usm_0.33_1.00_0.00,enc_auto/24eabc_06f112f5cdc742198a78e49953eafd0df000.jpg')]
             bg-cover
@@ -67,13 +70,13 @@ export default {
 
             <p class="text-white">Username</p>
 
-            <input class=" bg-black border-2 border-white text-white" v-model="username" type="text" placeholder="test">
+            <input class="rounded-md bg-black border-2 border-white text-white" v-model="username" type="text" placeholder="Username">
             
             <p class="text-white mt-3">Password</p>
 
-            <input class=" bg-black border-2 border-white text-white" v-model="password" type="password">
+            <input class="rounded-md bg-black border-2 border-white text-white" v-model="password" type="password">
 
-            <button type="submit" class="mt-10 bg-primary font-semibold text-black p-2">Login</button>
+            <button type="submit" class="rounded-md mt-10 bg-primary font-semibold text-black p-2">Login</button>
         </form>
     </div>
     
