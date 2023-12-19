@@ -152,7 +152,7 @@
   
   <div class="bg-black h-[1500px]">
       <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
-          SHOE ORDERS
+          😝 SHOE ORDERS 😝
       </h1>
 
       <div class="flex flex-wrap justify-center m-[5%] gap-6" v-if="shoes">
