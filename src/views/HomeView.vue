@@ -101,6 +101,9 @@
       <li id="home">
           Home
       </li>
+      <li class="ml-[-40%]" id="home">
+          <a href="/">Log out</a>
+      </li>
       <li>
           <img class="absolute left-[50%] translate-x-[-50%] mt-[-2%]" src="../assets/logo.svg" alt="">
       </li>
