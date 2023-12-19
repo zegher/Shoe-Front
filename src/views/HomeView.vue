@@ -116,7 +116,7 @@
   
   <div class="bg-black h-[1500px]">
       <h1 class="text-white font-bold text-5xl text-center pt-[125px]">
-          😝 SHOE ORDERS 😝
+          SHOE ORDERS
       </h1>
 
       <div class="flex flex-wrap justify-center m-[5%] gap-6" v-if="shoes">
@@ -129,14 +129,14 @@
       </div>
   </div> 
 
-    <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-600px] p-[5%] h-[400px] w-[500px]">
+    <div v-if="selectedShoe" class="text-black rounded-lg absolute left-[50%] translate-x-[-50%] bg-primary opacity-1 mt-[-600px] p-[5%] h-[400px] w-[500px]">
         <!-- an X that closes this div -->
         <p class="text-black text-xl font-bold ml-[-10%] mt-[-10%] cursor-pointer" @click="selectedShoe = null">X</p>
 
         <p><strong>Shoe ID:</strong> {{ selectedShoe._id }}</p>
         <p><strong>Status:</strong> {{ selectedShoe.status }}</p>
         <p><strong>Change status:</strong>
-            <select class="bg-primary border-2 border-black text-black ml-2" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
+            <select class="bg-primary border-2 border-black text-white ml-2" v-model="selectedShoe.status" @change="updateShoeStatusInApi" value="Change status">
                 <option value="verzonden">Verzonden</option>
                 <option value="geannuleerd">Geannuleerd</option>
                 <option value="productie">In Productie</option>
