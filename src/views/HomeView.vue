@@ -123,6 +123,7 @@
             <!-- Loop so all shoeorders are shown -->
             <div class="rounded-md w-[250px] bg-white text-black p-5" v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
                 <p class="font-semibold">{{ order.brand }}</p>
+                <p class="text-xs" >ID: {{ order._id }}</p>
                 <p >{{ order.price }} EUR</p>
                 <p class="rounded-md p-1 text-xs font-bold text-black border-2 border-primary bg-primary mt-[20px]" @click="selectShoe(order)">Details</p>          
             </div>
