@@ -13,12 +13,29 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: HomeView
     },
   ]
 })
+
+//add a global navigation guard to check if the websocket is open
+router.beforeEach((to, from, next) => {
+  const isLogged = localStorage.getItem('isLogged')
+  const websocket = window.$websocket; //acces websocket directly
+
+  //check if websocket is open and open if not
+  if (websocket && websocket.readyState !== websocket.OPEN) {
+    websocket.addEventListener('open', () => {
+      console.log('Websocket connected');
+      checkAuth(next, to, isLogged);
+      next();
+    });
+  }
+});
+
+function checkAuth(next, to, isLogged) {
+  if (to.name !== 'login' && !isLogged) next('/');
+  else next()
+}
 
 export default router
