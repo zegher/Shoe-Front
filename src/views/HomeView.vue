@@ -16,7 +16,7 @@
                 .then(data => { 
                 this.shoes = data;
                 console.log("data: ", data);
-                this.shoeCount = data.reduce((total, shoe) => total + shoe.orders, 0);
+                this.shoeCount = data.data[0].shoeOrders.length;
             });
         },
         mounted() {
@@ -29,6 +29,7 @@
 
                 this.shoes.data[0].shoeOrders.push(data.data.shoe);
                 console.log("logger: ", data);
+                this.shoeCount++;
             }
         },
         methods: {
@@ -90,40 +91,6 @@
                     console.error("WebSocket error: "), event;
                 });
             },
-
-            // //handle websocket message
-            // handleWebSocketMessage(data){
-            //     if(data && data.status === 'success' && data.message === "Shoe order created succesfull" && data.data && data.data.shoeOrder){
-            //         //handle new shoe order
-            //         const newShoeOrder = data.data.shoeOrder;
-            //         console.log("new shoe order created: ", newShoeOrder)
-            //         this.shoes.unshift(newShoeOrder);
-            //         this.shoeCount++;
-            //     } else if (data && data.status === 'success' && data.message === "Shoe order data updated succesfull" && data.data && data.data.shoeOrder){
-            //         //handle updated shoe order
-            //         const updatedShoeOrder = data.data.shoeOrder;
-            //         console.log("shoe order updated: ", updatedShoeOrder)
-            //         const index = this.shoes.findIndex(shoe => shoe._id === updatedShoeOrder._id);
-            //         if (index !== -1) {
-            //             this.shoes[index] = updatedShoeOrder;
-            //         }
-            //         else {
-            //             console.error("Could not find shoe order to update: ", data);
-            //         }
-            //     }
-            // },
-
-            // //fetch shoees and initialize websocket connection on component creation
-            // created(){
-            //     this.initialWebSocket();
-            //     this.created();
-            // },
-
-            // beforeDestroy(){
-            //     if(this.socket){
-            //         this.socket.close();
-            //     }
-            // },
         }
     }
 </script>
@@ -133,9 +100,6 @@
       <ul class="w-full bg-primary flex justify-between p-3">
       <li id="home">
           Home
-      </li>
-      <li class="ml-[-38%]">
-          Profile
       </li>
       <li>
           <img class="absolute left-[50%] translate-x-[-50%] mt-[-2%]" src="../assets/logo.svg" alt="">
@@ -157,11 +121,10 @@
 
       <div class="flex flex-wrap justify-center m-[5%] gap-6" v-if="shoes">
             <!-- Loop so all shoeorders are shown -->
-            <div v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
-                <div class="c-green border-2 border-white h-[200px] w-[150px]"></div>
-                <p class="text-white">{{ order.brand }}</p>
-                <p class="text-white">{{ order.price }} EUR</p>
-                <p class="text-black border-2 border-primary bg-primary mt-[30px]" @click="selectShoe(order)">Details</p>          
+            <div class="rounded-md w-[250px] bg-white text-black p-5" v-for="(order, index) in shoes.data[0].shoeOrders" :key="index">
+                <p class="font-semibold">{{ order.brand }}</p>
+                <p >{{ order.price }} EUR</p>
+                <p class="rounded-md p-1 text-xs font-bold text-black border-2 border-primary bg-primary mt-[20px]" @click="selectShoe(order)">Details</p>          
             </div>
       </div>
   </div> 
