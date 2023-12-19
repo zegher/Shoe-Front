@@ -96,7 +96,7 @@ export default {
 
     <div v-if="selectedShoe" class="absolute left-[50%] translate-x-[-50%] bg-primary mt-[-600px] p-[5%] h-[400px] w-[500px]">
         <!-- an X that closes this div -->
-        <p class="text-black text-1xl font-bold ml-[-55px] mt-[-60px]" @click="selectedShoe = null">X</p>
+        <p class="text-black text-xl font-bold ml-[-10%] mt-[-10%] cursor-pointer" @click="selectedShoe = null">X</p>
 
         <p><strong>Shoe ID:</strong> {{ selectedShoe._id }}</p>
         <p><strong>Status:</strong> {{ selectedShoe.status }}</p>
