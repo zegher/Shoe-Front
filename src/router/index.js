@@ -20,7 +20,7 @@ const router = createRouter({
 
 //add a global navigation guard to check if the websocket is open
 router.beforeEach((to, from, next) => {
-  const isLogged = localStorage.getItem('isLoggedIn');
+  const isLogged = localStorage.getItem('isLoggedIn') === 'true';
   const websocket = window.$websocket; //access websocket directly
 
   //check if websocket is open and open if not
