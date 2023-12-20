@@ -20,7 +20,7 @@ const router = createRouter({
 
 //add a global navigation guard to check if the websocket is open
 router.beforeEach((to, from, next) => {
-  const isLogged = localStorage.getItem('isLogged')
+  const isLogged = localStorage.getItem('isLoggedIn');
   const websocket = window.$websocket; //access websocket directly
 
   //check if websocket is open and open if not
@@ -31,15 +31,15 @@ router.beforeEach((to, from, next) => {
     });
   } else {
     checkAuth(next, to, isLogged);
-    next();
   }
 });
 
 function checkAuth(next, to, isLogged) {
-  if(to.matched.some(record => record.meta.requiresAuth) && !isLogged) {
-    next('/');
+  if(to.name !== 'login' && !isLogged) {
+    next({ name: 'login' });
   } else {
     next();
   }
 }
+
 export default router

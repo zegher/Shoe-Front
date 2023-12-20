@@ -32,13 +32,16 @@ export default {
                     if (data.status === 'error') {
                         throw new Error(data.message || 'Login failed');
                     }
-                    //if not admin then throw error
-                    // if (data.user.admin !== true) {
-                    //     throw new Error('You are not an admin');
+                    // if user admin is false, this.errror will be displayed
+                    // // if (data.user.admin === 0) {
+                    //     this.error = 'You are not an admin. You cannot log in.';
+                    //     console.log(data.user.admin);
+                    //     return;
                     // }
 
                     // Handle successful login here, e.g. by storing the returned token and redirecting the user
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('isLoggedIn', true);
                     this.$router.push('/home');
                     console.log(data);
                 })
